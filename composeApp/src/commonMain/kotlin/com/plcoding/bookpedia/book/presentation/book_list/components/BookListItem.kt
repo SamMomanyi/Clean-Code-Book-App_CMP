@@ -95,7 +95,7 @@ fun BookListItem(
                     }
                 )
                 when(val result = imageLoadResult){
-                    //if we haven't gotten a result yet it means we are still painting
+                    //if we haven't gotten a result yet it means we are still loading, later on we change the circularProgress indicator to pulse Animatiwwwsdnqwkdnwqg
                     null -> CircularProgressIndicator()
                     else -> {
                         Image(
