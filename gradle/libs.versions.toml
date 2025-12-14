@@ -25,6 +25,9 @@ sqlite = "2.5.0-alpha11"
 room = "2.7.0-alpha11"
 uiAndroid = "1.10.0"
 material3Android = "1.4.0"
+runtimeAndroid = "1.10.0"
+foundationAndroid = "1.10.0"
+foundationLayoutAndroid = "1.10.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -69,6 +72,9 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
+androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
