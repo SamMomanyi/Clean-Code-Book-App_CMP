@@ -6,5 +6,11 @@
     <string name="favorites">Favorites</string>
     <string name="no_search_results">Oops , there aren't any books for your search query</string>
     <string name="no_favorite_books">You haven't saved any favorite books yet</string>
+    <string name="error_disk_full">You haven't saved any favorite books yet</string>
+    <string name="error_unknown">You haven't saved any favorite books yet</string>
+    <string name="error_request_timeout">You haven't saved any favorite books yet</string>
+    <string name="error_no_internet">You haven't saved any favorite books yet</string>
+    <string name="error_too_many_requests">You haven't saved any favorite books yet</string>
+    <string name="error_serialization">You haven't saved any favorite books yet</string>
 
 </resources>

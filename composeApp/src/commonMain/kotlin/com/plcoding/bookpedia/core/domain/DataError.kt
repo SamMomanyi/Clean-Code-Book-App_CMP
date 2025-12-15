@@ -1,6 +1,6 @@
 package com.plcoding.bookpedia.core.domain
 
-sealed interface DataError {
+sealed interface DataError : Error {
     //we can have two types of errors that is Remote error and local error
     //the remote error is such as the one from server, the local error could be where the database is filled
     //inside this enum class we try to think of the type of remote errors we can have

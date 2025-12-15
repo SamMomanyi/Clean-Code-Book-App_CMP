@@ -82,7 +82,7 @@ fun BookListItem(
                     model = book.imageUrl,
                     onSuccess = {
                         //sometimes API loads an image but it is still not a successful result so we use
-                        if(it.painter.intrinsicSize.width > 1 && it.painter.intrinsicSize.height > 1){
+                        imageLoadResult = if(it.painter.intrinsicSize.width > 1 && it.painter.intrinsicSize.height > 1){
                             Result.success(it.painter)
                         }else{
                             Result.failure(Exception("Invalid image size"))
