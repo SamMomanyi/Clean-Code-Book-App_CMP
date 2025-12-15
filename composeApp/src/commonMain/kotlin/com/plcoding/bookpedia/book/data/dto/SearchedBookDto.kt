@@ -1,0 +1,23 @@
+package com.plcoding.bookpedia.book.data.dto
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+//from the techs being used
+@Serializable
+//this represents on searched book
+data class SearchedBookDto(
+    //this says that for the serial name key that json uses , that is our id , anything else not annotated has a similar name to the json
+    @SerialName("key") val id: String,
+    @SerialName("title") val title: String,
+    @SerialName("language") val languages: List<String>? = null,
+    @SerialName("cover_i") val coverAlternativeKey: Int? = null,
+    @SerialName("author_key") val authorKeys: List<String>? = null,
+    @SerialName("author_name") val authorNames: List<String>? = null,
+    @SerialName("cover_edition_key") val coverKey: Int? = null,
+    @SerialName("first_publish_year") val firstPublishYear: Int? = null,
+    @SerialName("ratings_average") val ratingsAverage: Double? = null,
+    @SerialName("ratings_count") val ratingsCount: List<String>? = null,
+    @SerialName("number_of_pages_median") val numPagesMedian: List<String>? = null,
+    @SerialName("edition_count") val numEditions: List<String>? = null,
+)

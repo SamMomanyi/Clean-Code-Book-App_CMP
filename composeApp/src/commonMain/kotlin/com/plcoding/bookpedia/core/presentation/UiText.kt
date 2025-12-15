@@ -13,6 +13,7 @@ sealed interface UiText {
         val args: Array<Any> = arrayOf()
     ): UiText
 
+    //a composable that checks what type of string it is , if a dynamic string , it returns the value straight away, if not it returns the resource id
     @Composable
     fun asString(): String {
         return when(this) {

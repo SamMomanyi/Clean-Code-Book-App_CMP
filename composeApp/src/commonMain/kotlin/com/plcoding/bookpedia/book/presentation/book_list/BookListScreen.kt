@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Tab
@@ -21,18 +23,23 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cmp_bookpedia.composeapp.generated.resources.Res
 import cmp_bookpedia.composeapp.generated.resources.favorites
+import cmp_bookpedia.composeapp.generated.resources.no_favorite_books
+import cmp_bookpedia.composeapp.generated.resources.no_search_results
 import cmp_bookpedia.composeapp.generated.resources.search_results
 import com.plcoding.bookpedia.book.domain.Book
+import com.plcoding.bookpedia.book.presentation.book_list.components.BookList
 import com.plcoding.bookpedia.book.presentation.book_list.components.BookSearchBar
 import com.plcoding.bookpedia.core.presentation.DarkBlue
 import com.plcoding.bookpedia.core.presentation.DesertWhite
@@ -72,6 +79,30 @@ fun BookListScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     //indicates that the horizontal pager has 2 states
     val pagerState =  rememberPagerState { 2 }
+    //for animations when searching we need a lazylist state
+    val searchResultListState = rememberLazyListState()
+    val favoriteBooksListState = rememberLazyListState()
+
+    //when the search results state and say we were at the bottom of the list it should animate scroll to first item
+    LaunchedEffect(
+        state.searchResults
+    ){
+        searchResultListState.animateScrollToItem(0)
+    }
+    //we need to have connectivity between the horizontal pager and the tab row such that if we swipe and switch pages they both update simulataneously
+    //we listen to our selected tab index, so whenever that changes yhis launchedEffect will be called
+    LaunchedEffect(
+        state.selectedTabIndex
+    ){
+        pagerState.animateScrollToPage(state.selectedTabIndex)
+    }
+
+    //we listen to whether the pagerState has changed and send  a command
+    LaunchedEffect(
+        pagerState.currentPage
+    ){
+        onAction(BookListCommand.OnTabSelection(pagerState.currentPage))
+    }
 
     Column(
         modifier = Modifier
@@ -166,8 +197,8 @@ fun BookListScreen(
                 }
 
 
-            }
-        }
+
+
         Spacer (modifier = Modifier.height(4.dp))
         //to be able to have swipe functionality we need more to the tabrow since the tabrow is just a skeleton tab row
         //we will need a horizontalPager
@@ -182,28 +213,74 @@ fun BookListScreen(
                 modifier = Modifier
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
-            )
+            ){
             when(pageIndex){
                 0 -> {
                     if(state.isLoading){
                         CircularProgressIndicator()
                     } else {
                         //different search result
-                        when(
+                        when{
                             state.errorMessage != null -> {
+                                Text(
+                                    //the as string composable is being put in use here where it checks what type of string is being passed
+                                    text = state.errorMessage.asString(),
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    color = MaterialTheme.colorScheme.error
+
+                                )
 
                         }
+                            //if no error but result is empty we then want to show a text ,a stringresource not the error message
+                            state.searchResults.isEmpty() -> {
+                                Text(
+                                    //the as string composable is being put in use here where it checks what type of string is being passed
+                                    text = stringResource(Res.string.no_search_results),
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    color = MaterialTheme.colorScheme.error
 
-                        ){
+                                )
 
+                            }
+
+                        //if we succeed in finding a book
+                        else -> {
+                            BookList(
+                                books = state.searchResults,
+                                onBookClick = {
+                                    onAction(BookListCommand.OnBooKClick(it))
+                                },
+                                modifier = Modifier.fillMaxSize(),
+                                scrollState = searchResultListState
+                            )
                         }
-                    }
-                }
-
-                1-> {
-
                 }
             }
         }
+                1 -> {
+                    if(state.favoriteBooks.isEmpty()){
+                        Text(
+                            //the as string composable is being put in use here where it checks what type of string is being passed
+                            text = stringResource(Res.string.no_favorite_books),
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.headlineSmall,
+                        )
+                    }
+                }
+                else -> {
+                    BookList(
+                        books = state.favoriteBooks,
+                        onBookClick = {
+                            onAction(BookListCommand.OnBooKClick(it))
+                        },
+                        modifier = Modifier.fillMaxSize(),
+                        scrollState = favoriteBooksListState
+                    )
+                }
+
+                }
     }
 }
+        }}}}

@@ -63,7 +63,9 @@ fun BookListItem(
                 .padding(16.dp)
                 .fillMaxWidth()
                 //a minimum intrisic size enables the components in row to work with a fixed max size to fill in all the items
-                .height(IntrinsicSize.Min)
+                .height(IntrinsicSize.Min),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ){
             Box(
                 modifier = Modifier
