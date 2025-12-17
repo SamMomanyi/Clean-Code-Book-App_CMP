@@ -13,7 +13,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 //we pass the specific engine type from wherever we call our specific platform App function
-fun App(engine : HttpClientEngine) {
+//we remove the engine after creating DI's
+fun App() {
 
     BookListScreenRoot(
         viewModel = remember { BookListViewModel(

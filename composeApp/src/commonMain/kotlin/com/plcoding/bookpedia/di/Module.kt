@@ -15,7 +15,7 @@ import org.koin.dsl.module
 //for koin different instances of dependencies are declared differently
 
 //we use the keyword expect for platform specific dependecies
-//what's cool : expect works like a interface where we are expected to have dependecies for each module
+//what's cool : expect works like a interface where we are expected to have dependecies for each module click iosMain, desktopMain,androidMain
 expect val platformModule: Module
 
 val sharedModule  = module {
