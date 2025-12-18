@@ -6,7 +6,8 @@ import com.plcoding.bookpedia.book.domain.Book
 //these aer the mappers , maps one object to another
 fun SearchedBookDto.toBook(): Book{
     return Book(
-        id = id,
+        //for the id we don't just wanna take the id but the substring after last and pass in this forward slash
+        id = id.substringAfterLast("/"),
         title = title,
         // a url to get a bookimage
 

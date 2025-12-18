@@ -119,6 +119,8 @@ dependencies {
     implementation(libs.androidx.runtime.android)
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.animation.android)
+    implementation(libs.androidx.benchmark.traceprocessor.android)
     debugImplementation(compose.uiTooling)
 }
 

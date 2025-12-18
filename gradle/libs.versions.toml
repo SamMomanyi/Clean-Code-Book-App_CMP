@@ -28,6 +28,8 @@ material3Android = "1.4.0"
 runtimeAndroid = "1.10.0"
 foundationAndroid = "1.10.0"
 foundationLayoutAndroid = "1.10.0"
+animationAndroid = "1.10.0"
+benchmarkTraceprocessorAndroid = "1.4.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -75,6 +77,8 @@ androidx-material3-android = { group = "androidx.compose.material3", name = "mat
 androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
 androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
+androidx-animation-android = { group = "androidx.compose.animation", name = "animation-android", version.ref = "animationAndroid" }
+androidx-benchmark-traceprocessor-android = { group = "androidx.benchmark", name = "benchmark-traceprocessor-android", version.ref = "benchmarkTraceprocessorAndroid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
