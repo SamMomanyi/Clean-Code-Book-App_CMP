@@ -121,6 +121,7 @@ dependencies {
     implementation(libs.androidx.foundation.layout.android)
     implementation(libs.androidx.animation.android)
     implementation(libs.androidx.benchmark.traceprocessor.android)
+    implementation(libs.androidx.room.common.jvm)
     debugImplementation(compose.uiTooling)
 }
 
