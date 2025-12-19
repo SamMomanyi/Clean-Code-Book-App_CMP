@@ -27,6 +27,8 @@ class BookListViewModel (
     private var cachedBooks = emptyList<Book>()
     //keeps track of the current search job , if another one begins we cancel the previous one
     private var searchJob: Job? = null
+    //later on after db implememtation
+    private var observefavouritesJob: Job? = null
 
     private val _state = MutableStateFlow(BookListState())
     val state = _state
@@ -34,6 +36,7 @@ class BookListViewModel (
             if(cachedBooks.isEmpty()){
                 observerSearchQuery()
             }
+            observeFavoriteBooks()
         }
         .stateIn(
             viewModelScope,
@@ -59,6 +62,22 @@ class BookListViewModel (
         }
 
     }
+    //later on after database implementation 2
+    private fun observeFavoriteBooks(){
+        observefavouritesJob?.cancel()
+        observefavouritesJob = bookRepository
+            .getFavoriteBooks()
+            .onEach {
+                favoriteBooks ->
+                _state.update {
+                    it.copy(
+                        favoriteBooks = favoriteBooks
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
+    }
+
     //inorder to trigger the search we need to listen to different searchquery state changes
     private fun observerSearchQuery(){
         state

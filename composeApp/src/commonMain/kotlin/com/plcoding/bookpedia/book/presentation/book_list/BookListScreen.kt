@@ -213,13 +213,13 @@ fun BookListScreen(
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ){
-            when(pageIndex){
+            when(pageIndex) {
                 0 -> {
-                    if(state.isLoading){
+                    if (state.isLoading) {
                         CircularProgressIndicator()
                     } else {
                         //different search result
-                        when{
+                        when {
                             state.errorMessage != null -> {
                                 Text(
                                     //the as string composable is being put in use here where it checks what type of string is being passed
@@ -230,7 +230,7 @@ fun BookListScreen(
 
                                 )
 
-                        }
+                            }
                             //if no error but result is empty we then want to show a text ,a stringresource not the error message
                             state.searchResults.isEmpty() -> {
                                 Text(
@@ -244,22 +244,23 @@ fun BookListScreen(
 
                             }
 
-                        //if we succeed in finding a book
-                        else -> {
-                            BookList(
-                                books = state.searchResults,
-                                onBookClick = {
-                                    onAction(BookListCommand.OnBooKClick(it))
-                                },
-                                modifier = Modifier.fillMaxSize(),
-                                scrollState = searchResultListState
-                            )
+                            //if we succeed in finding a book
+                            else -> {
+                                BookList(
+                                    books = state.searchResults,
+                                    onBookClick = {
+                                        onAction(BookListCommand.OnBooKClick(it))
+                                    },
+                                    modifier = Modifier.fillMaxSize(),
+                                    scrollState = searchResultListState
+                                )
+                            }
                         }
+                    }
                 }
-            }
-        }
+
                 1 -> {
-                    if(state.favoriteBooks.isEmpty()){
+                    if (state.favoriteBooks.isEmpty()) {
                         Text(
                             //the as string composable is being put in use here where it checks what type of string is being passed
                             text = stringResource(Res.string.no_favorite_books),
@@ -267,8 +268,9 @@ fun BookListScreen(
                             style = MaterialTheme.typography.headlineSmall,
                         )
                     }
-                }
-                else -> {
+
+
+                else  {
                     BookList(
                         books = state.favoriteBooks,
                         onBookClick = {
@@ -279,7 +281,7 @@ fun BookListScreen(
                     )
                 }
 
-                }
+            }
     }
 }
-        }}}}
+        }}}}}

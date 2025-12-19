@@ -11,6 +11,8 @@ import com.plcoding.bookpedia.core.domain.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -27,6 +29,7 @@ class BookDetailViewModel(
     private val _state = MutableStateFlow(BookDetailState())
     val state = _state.onStart {
         fetchBookDescription()
+        observeFavoriteStatus()
     }
         .stateIn(
             viewModelScope,
@@ -45,10 +48,34 @@ class BookDetailViewModel(
                 }
             }
             is BookDetailCommand.OnFavoriteClick -> {
-
+                viewModelScope.launch {
+                    if(state.value.isFavorite){
+                        bookRepository.deleteFromFavorite(bookId)
+                    }else{
+                        state.value.book?.let { book ->
+                            bookRepository.markAsFavorite(book)
+                        }
+                    }
+                }
             }
             else -> Unit
         }
+    }
+
+    //comes after databaseImplementation, we check of value change in our db to update UI
+    private fun observeFavoriteStatus(){
+        bookRepository
+            .isBookFavorite(bookId)
+            //on every (each)change , we get info and update our state with that info
+            .onEach {
+                isFavorite ->
+                _state.update {
+                    it.copy (
+                        isFavorite = isFavorite
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     //also comes after at BookDetailScreen 2

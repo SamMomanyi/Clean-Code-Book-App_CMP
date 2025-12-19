@@ -3,18 +3,15 @@ package com.plcoding.bookpedia.di
 import com.plcoding.bookpedia.book.data.database.DatabaseFactory
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
-import okhttp3.OkHttpClient
-import org.koin.android.ext.koin.androidApplication
-import org.koin.core.module.Module
 import org.koin.dsl.module
+import org.koin.core.module.Module
 
 actual val platformModule: Module
-    //we must also specify that it is of type HttpClientEngine
     get() = module {
         single<HttpClientEngine> {
-           OkHttp.create()
+            OkHttp.create()
         }
         single{
-            DatabaseFactory(androidApplication())
+            DatabaseFactory()
         }
     }
