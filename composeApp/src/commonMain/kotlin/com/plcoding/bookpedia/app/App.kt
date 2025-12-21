@@ -1,5 +1,7 @@
 package com.plcoding.bookpedia.app
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -45,10 +47,19 @@ fun App() {
         ){
             navigation<Route.BookGraph>(
                 startDestination = Route.BookList
+
             ){
                 //we the define the composable screens
                 //we pass the id needed on one side to the other
-                composable<Route.BookList> {
+                composable<Route.BookList> (
+                    //also done at Animations
+                    //we have an animation here where we exit from bookList screen into another screen
+                    //we always exit from bookLIst screen since it is the first screen
+                    exitTransition = { slideOutHorizontally() },
+                    popEnterTransition = {
+                        slideInHorizontally()
+                    }
+                ){
                     val viewModel = koinViewModel<BookListViewModel>()
                     val selectedBookViewModel = it.sharedKoinViewModel<SelectedBookViewModel>(navController)
                     //if we get back to the BookList we then want to reset selectedBok
@@ -68,7 +79,15 @@ fun App() {
                         }
                     )
                 }
-                composable<Route.BookDetail> {
+                composable<Route.BookDetail>(
+                    //here we do it the other way around as compared to bookDetailScreen
+                    enterTransition = { slideInHorizontally { initialOffset ->
+                        initialOffset
+                    } },
+                    exitTransition = {slideOutHorizontally{ initialOffset ->
+                        initialOffset
+                    }}
+                ) {
                     val selectedBookViewModel = it.sharedKoinViewModel<SelectedBookViewModel>(navController)
                     val selectedBook by selectedBookViewModel.selectedBook.collectAsStateWithLifecycle()
                     val viewModel = koinViewModel<BookDetailViewModel>()

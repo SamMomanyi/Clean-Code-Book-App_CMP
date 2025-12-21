@@ -11,7 +11,7 @@ actual val platformModule: Module
         single<HttpClientEngine> {
             OkHttp.create()
         }
-        single{
+        single<DatabaseFactory>{
             DatabaseFactory()
         }
     }

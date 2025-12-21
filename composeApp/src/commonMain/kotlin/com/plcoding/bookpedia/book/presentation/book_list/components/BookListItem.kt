@@ -1,5 +1,7 @@
 package com.plcoding.bookpedia.book.presentation.book_list.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapPosition
@@ -30,15 +32,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cmp_bookpedia.composeapp.generated.resources.Res
 import cmp_bookpedia.composeapp.generated.resources.book_error_2
+import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.plcoding.bookpedia.book.domain.Book
 import com.plcoding.bookpedia.core.presentation.LightBlue
+import com.plcoding.bookpedia.core.presentation.PulseAnimation
 import com.plcoding.bookpedia.core.presentation.SandYellow
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.round
@@ -94,9 +100,23 @@ fun BookListItem(
                         imageLoadResult = Result.failure(it.result.throwable)
                     }
                 )
+                //comes at the last place where we have ANimation
+                //we can use painter state to check whether loading was successful and try and transition
+                val painterState by painter.state.collectAsStateWithLifecycle()
+                val transition by animateFloatAsState(
+                    targetValue = if(painterState is AsyncImagePainter.State.Success){
+                        1f
+                    } else {
+                        0f
+                    },
+                    //800 milis
+                    animationSpec = tween(durationMillis = 800)
+                )
                 when(val result = imageLoadResult){
                     //if we haven't gotten a result yet it means we are still loading, later on we change the circularProgress indicator to pulse Animatiwwwsdnqwkdnwqg
-                    null -> CircularProgressIndicator()
+                    null -> PulseAnimation(
+                        modifier = Modifier.size(60.dp)
+                    )
                     else -> {
                         Image(
                         painter = if(result.isSuccess) painter
@@ -120,6 +140,14 @@ fun BookListItem(
                                     ratio = 0.65f,
                                     matchHeightConstraintsFirst = true
                                 )
+                                //we need to have a rotation where the book cover rotates toward the inside of the screen
+                                //so transition starts of @ 0f to 1f, so we start at 30 degrees towards 0 degrees
+                                .graphicsLayer {
+                                    rotationX = (1f - transition) * 30f
+                                    val scale = 0.8f + (0.2f * transition)
+                                    scaleX = scale
+                                    scaleY = scale
+                                }
                         )
                     }
                 }
